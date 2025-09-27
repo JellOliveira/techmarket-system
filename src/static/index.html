@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechMarket - Sistema Bancário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .tab-active { @apply bg-blue-500 text-white; }
+        .tab-inactive { @apply bg-gray-200 text-gray-700 hover:bg-gray-300; }
+        .form-error { @apply border-red-500 bg-red-50; }
+        .form-success { @apply border-green-500 bg-green-50; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+                <i data-lucide="building-2" class="w-8 h-8 text-blue-600 mr-3"></i>
+                <h1 class="text-3xl font-bold text-gray-800">TechMarket</h1>
+            </div>
+            <p class="text-gray-600">Sistema Bancário Integrado</p>
+            <p class="text-sm text-gray-500">Projeto Integrado Interdisciplinar - Análise e Desenvolvimento de Sistemas</p>
+            
+            <div class="flex justify-center items-center space-x-6 mt-4">
+                <span class="flex items-center text-sm text-green-600">
+                    <i data-lucide="shield-check" class="w-4 h-4 mr-1"></i>
+                    Seguro
+                </span>
+                <span class="flex items-center text-sm text-blue-600">
+                    <i data-lucide="smartphone" class="w-4 h-4 mr-1"></i>
+                    Responsivo
+                </span>
+                <span class="flex items-center text-sm text-purple-600">
+                    <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+                    Escalável
+                </span>
+            </div>
+        </header>
+
+        <!-- Navegação por Tabs -->
+        <div class="flex flex-wrap justify-center mb-8">
+            <button onclick="showTab('visao-geral')" id="tab-visao-geral" class="px-6 py-3 rounded-l-lg tab-active transition-colors">
+                Visão Geral
+            </button>
+            <button onclick="showTab('validacao')" id="tab-validacao" class="px-6 py-3 tab-inactive transition-colors">
+                Validação
+            </button>
+            <button onclick="showTab('extrato')" id="tab-extrato" class="px-6 py-3 tab-inactive transition-colors">
+                Extrato
+            </button>
+            <button onclick="showTab('transferencia')" id="tab-transferencia" class="px-6 py-3 rounded-r-lg tab-inactive transition-colors">
+                Transferência
+            </button>
+        </div>
+
+        <!-- Conteúdo das Tabs -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Tab Visão Geral -->
+            <div id="content-visao-geral" class="tab-content">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="info" class="w-6 h-6 text-blue-600 mr-3"></i>
+                        <h2 class="text-2xl font-bold text-gray-800">Sobre o Projeto TechMarket</h2>
+                    </div>
+                    <p class="text-gray-600 mb-6">Solução completa para os desafios de e-commerce da TechMarket</p>
+                    
+                    <p class="text-gray-700 mb-8">
+                        A TechMarket enfrentava desafios críticos de desempenho durante promoções, com falhas recorrentes, 
+                        latência elevada e arquitetura monolítica limitada. Este projeto apresenta soluções técnicas integradas 
+                        para os cinco principais desafios identificados.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-red-800 mb-4">Problemas Identificados</h3>
+                            <ul class="space-y-2 text-red-700">
+                                <li>• Falhas durante picos de acesso (Black Friday)</li>
+                                <li>• Latência elevada (>5s) em transações</li>
+                                <li>• Arquitetura monolítica não escalável</li>
+                                <li>• Frontend não responsivo (40% mobile)</li>
+                                <li>• Falta de validações robustas</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">Soluções Implementadas</h3>
+                            <ul class="space-y-2 text-green-700">
+                                <li>• Escalonamento horizontal na nuvem</li>
+                                <li>• API segura para transações financeiras</li>
+                                <li>• Interface responsiva mobile-first</li>
+                                <li>• Validações em tempo real</li>
+                                <li>• Otimização de consultas SQL</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Funcionalidades -->
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                            <i data-lucide="check-circle" class="w-12 h-12 text-blue-600 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-semibold text-blue-800 mb-2">Passo 5</h3>
+                            <h4 class="font-medium text-blue-700 mb-2">Validação de Formulário</h4>
+                            <p class="text-sm text-blue-600 mb-4">Validação em tempo real de CPF, data de nascimento e telefone</p>
+                            <button onclick="showTab('validacao')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                                Acessar Funcionalidade
+                            </button>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                            <i data-lucide="file-text" class="w-12 h-12 text-green-600 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-semibold text-green-800 mb-2">Passo 3</h3>
+                            <h4 class="font-medium text-green-700 mb-2">Extrato Bancário</h4>
+                            <p class="text-sm text-green-600 mb-4">Interface responsiva para visualização de transações</p>
+                            <button onclick="showTab('extrato')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">
+                                Acessar Funcionalidade
+                            </button>
+                        </div>
+
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+                            <i data-lucide="arrow-right-left" class="w-12 h-12 text-purple-600 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-semibold text-purple-800 mb-2">Passo 2</h3>
+                            <h4 class="font-medium text-purple-700 mb-2">Transferência Financeira</h4>
+                            <p class="text-sm text-purple-600 mb-4">API segura para transferências com validação de saldo</p>
+                            <button onclick="showTab('transferencia')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors">
+                                Acessar Funcionalidade
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Validação -->
+            <div id="content-validacao" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-blue-600 mr-3"></i>
+                        <h2 class="text-2xl font-bold text-gray-800">Validação de Formulário</h2>
+                    </div>
+                    <p class="text-gray-600 mb-6">Preencha os campos abaixo para validação em tempo real</p>
+                    
+                    <form id="form-validacao" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CPF</label>
+                            <input type="text" id="cpf" placeholder="000.000.000-00" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <div id="cpf-error" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento</label>
+                            <input type="date" id="data-nascimento" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <div id="data-error" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                            <input type="text" id="telefone" placeholder="(00) 00000-0000" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <div id="telefone-error" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            Validar Formulário
+                        </button>
+                        
+                        <div id="resultado-validacao" class="hidden p-4 rounded-lg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tab Extrato -->
+            <div id="content-extrato" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="file-text" class="w-6 h-6 text-green-600 mr-3"></i>
+                        <h2 class="text-2xl font-bold text-gray-800">Extrato Bancário</h2>
+                    </div>
+                    <p class="text-gray-600 mb-6">Visualize suas transações e saldo atual</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Conta</label>
+                            <select id="conta-extrato" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Selecione uma conta</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Limite</label>
+                            <select id="limite-extrato" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="5">5 transações</option>
+                                <option value="10" selected>10 transações</option>
+                                <option value="20">20 transações</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-end">
+                            <button onclick="carregarExtrato()" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="resultado-extrato" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Tab Transferência -->
+            <div id="content-transferencia" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="arrow-right-left" class="w-6 h-6 text-purple-600 mr-3"></i>
+                        <h2 class="text-2xl font-bold text-gray-800">Transferência Financeira</h2>
+                    </div>
+                    <p class="text-gray-600 mb-6">API segura para transferências com validação de saldo</p>
+                    
+                    <form id="form-transferencia" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Conta Origem</label>
+                                <select id="conta-origem" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                    <option value="">Selecione a conta origem</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Conta Destino</label>
+                                <select id="conta-destino" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                    <option value="">Selecione a conta destino</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Valor</label>
+                            <input type="number" id="valor-transferencia" step="0.01" min="0.01" placeholder="0,00" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                            <input type="text" id="descricao-transferencia" placeholder="Descrição da transferência" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            Realizar Transferência
+                        </button>
+                        
+                        <div id="resultado-transferencia" class="hidden p-4 rounded-lg"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>Desenvolvido por <strong>Jéssica Oliveira Meira</strong> - Projeto Integrado Interdisciplinar ADS - 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        // Inicializar ícones Lucide
+        lucide.createIcons();
+        
+        // Dados simulados para demonstração
+        const contasSimuladas = [
+            { id: 1, numero_conta: "000001", titular: "Maria Silva Santos", saldo: 16153.50, cpf: "12345678901" },
+            { id: 2, numero_conta: "000002", titular: "João Pedro Oliveira", saldo: 8325.75, cpf: "98765432109" },
+            { id: 3, numero_conta: "000003", titular: "Ana Carolina Ferreira", saldo: 29085.75, cpf: "11122233344" },
+            { id: 4, numero_conta: "000004", titular: "Carlos Eduardo Lima", saldo: 2225.50, cpf: "55566677788" },
+            { id: 5, numero_conta: "000005", titular: "Fernanda Costa Alves", saldo: 9161.00, cpf: "99988877766" }
+        ];
+
+        const transacoesSimuladas = [
+            {
+                id: 1,
+                codigo_unico: "6de0b55c-cb3d-4b54-a924-7a1536bc7cd6",
+                tipo: "transferencia",
+                valor: 890.00,
+                descricao: "Reembolso de viagem",
+                data_transacao: "2025-09-25T03:18:24.601316",
+                tipo_movimento: "entrada",
+                conta_relacionada: "000005",
+                valor_alto: false,
+                status: "concluida"
+            },
+            {
+                id: 2,
+                codigo_unico: "d7ee2a02-a024-45a3-acca-390fb082d14f",
+                tipo: "transferencia",
+                valor: 680.25,
+                descricao: "Transferência para poupança",
+                data_transacao: "2025-09-24T15:18:24.601316",
+                tipo_movimento: "saida",
+                conta_relacionada: "000003",
+                valor_alto: false,
+                status: "concluida"
+            },
+            {
+                id: 3,
+                codigo_unico: "32d6f684-05f7-4a92-8af4-d0f01c687e3b",
+                tipo: "transferencia",
+                valor: 5125.50,
+                descricao: "Pagamento de fornecedor",
+                data_transacao: "2025-09-24T15:18:24.601316",
+                tipo_movimento: "saida",
+                conta_relacionada: "000004",
+                valor_alto: true,
+                status: "concluida"
+            }
+        ];
+
+        // Funções de navegação
+        function showTab(tabName) {
+            // Esconder todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remover classe ativa de todos os botões
+            document.querySelectorAll('[id^="tab-"]').forEach(button => {
+                button.className = button.className.replace('tab-active', 'tab-inactive');
+            });
+            
+            // Mostrar conteúdo selecionado
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Ativar botão selecionado
+            document.getElementById(`tab-${tabName}`).className = 
+                document.getElementById(`tab-${tabName}`).className.replace('tab-inactive', 'tab-active');
+            
+            // Carregar dados específicos da aba
+            if (tabName === 'extrato' || tabName === 'transferencia') {
+                carregarContas();
+            }
+        }
+
+        // Carregar contas nos selects
+        function carregarContas() {
+            const selectExtrato = document.getElementById('conta-extrato');
+            const selectOrigemTransferencia = document.getElementById('conta-origem');
+            const selectDestinoTransferencia = document.getElementById('conta-destino');
+            
+            [selectExtrato, selectOrigemTransferencia, selectDestinoTransferencia].forEach(select => {
+                if (select && select.children.length <= 1) {
+                    contasSimuladas.forEach(conta => {
+                        const option = document.createElement('option');
+                        option.value = conta.id;
+                        option.textContent = `${conta.numero_conta} - ${conta.titular}`;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        // Validação de formulário
+        document.getElementById('form-validacao').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const cpf = document.getElementById('cpf').value;
+            const dataNascimento = document.getElementById('data-nascimento').value;
+            const telefone = document.getElementById('telefone').value;
+            
+            let valido = true;
+            let mensagens = [];
+            
+            // Simular validações
+            if (!cpf || cpf.length < 11) {
+                document.getElementById('cpf-error').textContent = 'CPF inválido';
+                document.getElementById('cpf-error').classList.remove('hidden');
+                document.getElementById('cpf').classList.add('form-error');
+                valido = false;
+            } else {
+                document.getElementById('cpf-error').classList.add('hidden');
+                document.getElementById('cpf').classList.remove('form-error');
+                document.getElementById('cpf').classList.add('form-success');
+                mensagens.push('CPF válido');
+            }
+            
+            if (!dataNascimento) {
+                document.getElementById('data-error').textContent = 'Data de nascimento é obrigatória';
+                document.getElementById('data-error').classList.remove('hidden');
+                document.getElementById('data-nascimento').classList.add('form-error');
+                valido = false;
+            } else {
+                const idade = new Date().getFullYear() - new Date(dataNascimento).getFullYear();
+                if (idade < 18) {
+                    document.getElementById('data-error').textContent = 'Idade mínima é 18 anos';
+                    document.getElementById('data-error').classList.remove('hidden');
+                    document.getElementById('data-nascimento').classList.add('form-error');
+                    valido = false;
+                } else {
+                    document.getElementById('data-error').classList.add('hidden');
+                    document.getElementById('data-nascimento').classList.remove('form-error');
+                    document.getElementById('data-nascimento').classList.add('form-success');
+                    mensagens.push(`Data válida. Idade: ${idade} anos`);
+                }
+            }
+            
+            if (!telefone || telefone.length < 10) {
+                document.getElementById('telefone-error').textContent = 'Telefone inválido';
+                document.getElementById('telefone-error').classList.remove('hidden');
+                document.getElementById('telefone').classList.add('form-error');
+                valido = false;
+            } else {
+                document.getElementById('telefone-error').classList.add('hidden');
+                document.getElementById('telefone').classList.remove('form-error');
+                document.getElementById('telefone').classList.add('form-success');
+                mensagens.push('Telefone válido');
+            }
+            
+            // Mostrar resultado
+            const resultado = document.getElementById('resultado-validacao');
+            resultado.classList.remove('hidden');
+            
+            if (valido) {
+                resultado.className = 'p-4 rounded-lg bg-green-50 border border-green-200 text-green-800';
+                resultado.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                        <strong>Formulário válido!</strong>
+                    </div>
+                    <ul class="mt-2 text-sm">
+                        ${mensagens.map(msg => `<li>• ${msg}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                resultado.className = 'p-4 rounded-lg bg-red-50 border border-red-200 text-red-800';
+                resultado.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>
+                        <strong>Alguns campos precisam ser corrigidos</strong>
+                    </div>
+                `;
+            }
+            
+            lucide.createIcons();
+        });
+
+        // Carregar extrato
+        function carregarExtrato() {
+            const contaId = document.getElementById('conta-extrato').value;
+            const limite = document.getElementById('limite-extrato').value;
+            
+            if (!contaId) {
+                alert('Selecione uma conta');
+                return;
+            }
+            
+            const conta = contasSimuladas.find(c => c.id == contaId);
+            const transacoes = transacoesSimuladas.slice(0, limite);
+            
+            const resultado = document.getElementById('resultado-extrato');
+            resultado.innerHTML = `
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-800">${conta.titular}</h3>
+                            <p class="text-blue-600">Conta: ${conta.numero_conta} | CPF: ${conta.cpf}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-blue-600">Saldo Atual</p>
+                            <p class="text-2xl font-bold text-blue-800">R$ ${conta.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Últimas Transações</h4>
+                    ${transacoes.map(transacao => `
+                        <div class="border rounded-lg p-4 ${transacao.valor_alto ? 'border-yellow-300 bg-yellow-50' : transacao.tipo_movimento === 'entrada' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-2">
+                                        <i data-lucide="${transacao.tipo_movimento === 'entrada' ? 'trending-up' : 'trending-down'}" class="w-4 h-4 ${transacao.tipo_movimento === 'entrada' ? 'text-green-600' : 'text-red-600'} mr-2"></i>
+                                        <span class="font-medium">${transacao.tipo === 'transferencia' ? `Transferência ${transacao.tipo_movimento === 'entrada' ? 'recebida' : 'enviada'}` : transacao.tipo}</span>
+                                        ${transacao.valor_alto ? '<span class="ml-2 px-2 py-1 bg-yellow-200 text-yellow-800 text-xs rounded">Valor Alto</span>' : ''}
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-1">${transacao.descricao}</p>
+                                    <p class="text-xs text-gray-500">
+                                        ${new Date(transacao.data_transacao).toLocaleString('pt-BR')} | 
+                                        Código: ${transacao.codigo_unico.slice(0, 8)}... | 
+                                        Conta: ${transacao.conta_relacionada}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold ${transacao.tipo_movimento === 'entrada' ? 'text-green-600' : 'text-red-600'}">
+                                        ${transacao.tipo_movimento === 'entrada' ? '+' : '-'}R$ ${transacao.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                                    </p>
+                                    <span class="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded">${transacao.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            lucide.createIcons();
+        }
+
+        // Transferência
+        document.getElementById('form-transferencia').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const contaOrigemId = document.getElementById('conta-origem').value;
+            const contaDestinoId = document.getElementById('conta-destino').value;
+            const valor = parseFloat(document.getElementById('valor-transferencia').value);
+            const descricao = document.getElementById('descricao-transferencia').value;
+            
+            const resultado = document.getElementById('resultado-transferencia');
+            resultado.classList.remove('hidden');
+            
+            if (!contaOrigemId || !contaDestinoId || !valor || valor <= 0) {
+                resultado.className = 'p-4 rounded-lg bg-red-50 border border-red-200 text-red-800';
+                resultado.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>
+                        <strong>Preencha todos os campos corretamente</strong>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            if (contaOrigemId === contaDestinoId) {
+                resultado.className = 'p-4 rounded-lg bg-red-50 border border-red-200 text-red-800';
+                resultado.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>
+                        <strong>Conta origem e destino devem ser diferentes</strong>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            const contaOrigem = contasSimuladas.find(c => c.id == contaOrigemId);
+            const contaDestino = contasSimuladas.find(c => c.id == contaDestinoId);
+            
+            if (contaOrigem.saldo < valor) {
+                resultado.className = 'p-4 rounded-lg bg-red-50 border border-red-200 text-red-800';
+                resultado.innerHTML = `
+                    <div class="flex items-center">
+                        <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>
+                        <strong>Saldo insuficiente</strong>
+                    </div>
+                    <p class="mt-2 text-sm">Saldo disponível: R$ ${contaOrigem.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            // Simular transferência bem-sucedida
+            contaOrigem.saldo -= valor;
+            contaDestino.saldo += valor;
+            
+            const codigoTransacao = 'TXN' + Date.now().toString().slice(-8);
+            
+            resultado.className = 'p-4 rounded-lg bg-green-50 border border-green-200 text-green-800';
+            resultado.innerHTML = `
+                <div class="flex items-center mb-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                    <strong>Transferência realizada com sucesso!</strong>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p><strong>Código:</strong> ${codigoTransacao}</p>
+                        <p><strong>Valor:</strong> R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p><strong>Data:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+                    </div>
+                    <div>
+                        <p><strong>De:</strong> ${contaOrigem.numero_conta} (Saldo: R$ ${contaOrigem.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})})</p>
+                        <p><strong>Para:</strong> ${contaDestino.numero_conta} (Saldo: R$ ${contaDestino.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})})</p>
+                        <p><strong>Descrição:</strong> ${descricao || 'Transferência'}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Limpar formulário
+            document.getElementById('form-transferencia').reset();
+            
+            lucide.createIcons();
+        });
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('visao-geral');
+        });
+    </script>
+</body>
+</html>
