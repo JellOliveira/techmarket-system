@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 
 env:
+  # O PROJECT_ID agora contém o ID NUMÉRICO (962245356193)
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: techmarket-api
   REGION: us-central1
@@ -17,23 +18,24 @@ jobs:
     
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Atualizado para v4 ou v5 para compatibilidade
 
-    # CORREÇÃO: Usa 'credentials_json' em vez de 'service_account_key' 
-    # para resolver o erro de autenticação do GCP CLI.
+    # CORREÇÃO: Usando a versão mais recente e os parâmetros corretos.
+    # O project_id agora passa o ID NUMÉRICO (962245356193)
     - name: Setup Google Cloud CLI and Authenticate
-      uses: google-github-actions/setup-gcloud@v1
+      uses: google-github-actions/auth@v2 # Action CORRETO para autenticação
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ env.PROJECT_ID }} # Referencia a variável de ambiente atualizada
+        
+    # O gcloud config set project agora deve funcionar, pois o valor é numérico.
 
     - name: Configure Docker to use gcloud as a credential helper
       run: |
-        gcloud auth configure-docker ${REGISTRY_HOSTNAME}
+        gcloud auth configure-docker
 
     - name: Build and Push Container
       run: |
-        # Usa Artifact Registry (gcr.io aponta para ele por padrão)
         docker build -t gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA .
         docker push gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA
 
