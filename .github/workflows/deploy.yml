@@ -7,7 +7,6 @@ on:
     branches: [ main ]
 
 env:
-  # O PROJECT_ID agora contém o ID NUMÉRICO (962245356193), conforme o Passo A
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: techmarket-api
   REGION: us-central1
@@ -15,22 +14,16 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
 
-    # CORREÇÃO 1: Autentica SOMENTE com a chave JSON (credentials_json)
-    # O Action 'auth@v2' não aceita o project_id neste passo.
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v1
       with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
-        
-    # CORREÇÃO 2: Configura o ID do projeto em um passo separado após a autenticação.
-    # Isso resolve o erro de que o Action 'auth' estava recebendo o project_id.
-    - name: Set Project ID
-      run: gcloud config set project ${{ env.PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Configure Docker to use gcloud as a credential helper
       run: |
