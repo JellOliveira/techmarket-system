@@ -26,7 +26,7 @@ jobs:
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_PROJECT_ID }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       # NOVO PASSO 2: SETUP DA CLI (sem autenticação, apenas configurando o ambiente)
       - name: Setup Google Cloud CLI
@@ -54,4 +54,3 @@ jobs:
             --cpu 1 \
             --port 5000 \
             --set-env-vars="FLASK_ENV=production"
-            
