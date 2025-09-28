@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: 'techmarket-system'
   SERVICE: techmarket-api
   REGION: us-central1
 
