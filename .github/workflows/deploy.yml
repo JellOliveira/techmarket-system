@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  # O PROJECT_ID agora contém o ID NUMÉRICO (962245356193)
+  # O PROJECT_ID agora contém o ID NUMÉRICO (962245356193), conforme o Passo A
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: techmarket-api
   REGION: us-central1
@@ -18,17 +18,19 @@ jobs:
     
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4 # Atualizado para v4 ou v5 para compatibilidade
+      uses: actions/checkout@v4
 
-    # CORREÇÃO: Usando a versão mais recente e os parâmetros corretos.
-    # O project_id agora passa o ID NUMÉRICO (962245356193)
-    - name: Setup Google Cloud CLI and Authenticate
-      uses: google-github-actions/auth@v2 # Action CORRETO para autenticação
+    # CORREÇÃO 1: Autentica SOMENTE com a chave JSON (credentials_json)
+    # O Action 'auth@v2' não aceita o project_id neste passo.
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
-        project_id: ${{ env.PROJECT_ID }} # Referencia a variável de ambiente atualizada
         
-    # O gcloud config set project agora deve funcionar, pois o valor é numérico.
+    # CORREÇÃO 2: Configura o ID do projeto em um passo separado após a autenticação.
+    # Isso resolve o erro de que o Action 'auth' estava recebendo o project_id.
+    - name: Set Project ID
+      run: gcloud config set project ${{ env.PROJECT_ID }}
 
     - name: Configure Docker to use gcloud as a credential helper
       run: |
