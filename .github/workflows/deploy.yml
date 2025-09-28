@@ -23,7 +23,7 @@ jobs:
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       # NOVO PASSO 2: SETUP DA CLI (sem autenticação, apenas configurando o ambiente)
       - name: Setup Google Cloud CLI
