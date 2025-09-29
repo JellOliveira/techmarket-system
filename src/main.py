@@ -3,13 +3,14 @@ import sys
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 from src.models.user import db
 from src.models.financial import Conta, Transacao
 from src.routes.user import user_bp
 from src.routes.financial import financial_bp
 from src.routes.validation import validation_bp
+from decimal import Decimal
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -28,12 +29,30 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# NOVA ROTA PARA CRIAR CONTAS PELO SITE
+@app.route('/api/contas', methods=['POST'])
+def criar_conta():
+    data = request.json
+    nova_conta = Conta(
+        numero_conta=data['numero_conta'],
+        titular=data['titular'],
+        cpf=data['cpf'],
+        saldo=Decimal(str(data.get('saldo', '0.00')))
+    )
+    db.session.add(nova_conta)
+    db.session.commit()
+    return jsonify({
+        'id': nova_conta.id,
+        'numero_conta': nova_conta.numero_conta,
+        'titular': nova_conta.titular
+    }), 201
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
     static_folder_path = app.static_folder
     if static_folder_path is None:
-            return "Static folder not configured", 404
+        return "Static folder not configured", 404
 
     if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
         return send_from_directory(static_folder_path, path)
@@ -43,7 +62,6 @@ def serve(path):
             return send_from_directory(static_folder_path, 'index.html')
         else:
             return "index.html not found", 404
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

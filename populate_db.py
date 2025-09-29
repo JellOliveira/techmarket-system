@@ -16,15 +16,15 @@ import uuid
 
 def criar_dados_exemplo():
     """Criar dados de exemplo para demonstração"""
-    
+
     with app.app_context():
         # Limpar dados existentes
         db.drop_all()
         db.create_all()
-        
+
         print("Criando contas de exemplo...")
-        
-        # Criar contas de exemplo
+
+        # LISTA DE CONTAS – ADICIONE MAIS AQUI SE DESEJAR!
         contas = [
             {
                 'numero_conta': '000001',
@@ -55,26 +55,40 @@ def criar_dados_exemplo():
                 'titular': 'Fernanda Costa Alves',
                 'cpf': '99988877766',
                 'saldo': Decimal('12750.25')
-            }
+            },
+            # Novas contas – adicione abaixo nesse formato:
+            {
+                'numero_conta': '000006',
+                'titular': 'Lucas Neves Souza',
+                'cpf': '22233344455',
+                'saldo': Decimal('5400.80')
+            },
+            {
+                'numero_conta': '000007',
+                'titular': 'Bruna Martins dos Reis',
+                'cpf': '77788899900',
+                'saldo': Decimal('10000.00')
+            },
+            # Sempre seguindo o padrão acima!
         ]
-        
+
         contas_criadas = []
         for conta_data in contas:
             conta = Conta(**conta_data)
             db.session.add(conta)
             contas_criadas.append(conta)
-        
+
         db.session.commit()
         print(f"✅ {len(contas_criadas)} contas criadas com sucesso!")
-        
+
         print("Criando transações de exemplo...")
-        
+
         # Criar transações de exemplo
         transacoes = []
-        
+
         # Transações dos últimos 30 dias
         base_date = datetime.now()
-        
+
         # Depósitos iniciais
         for i, conta in enumerate(contas_criadas):
             transacao = Transacao(
@@ -87,8 +101,8 @@ def criar_dados_exemplo():
                 status='concluida'
             )
             transacoes.append(transacao)
-        
-        # Transferências entre contas
+
+        # Transferências entre contas (ajustar caso adicione muitas contas!)
         transferencias_exemplo = [
             {
                 'origem': 0, 'destino': 1, 'valor': 1500.00, 'dias_atras': 25,
@@ -131,31 +145,30 @@ def criar_dados_exemplo():
                 'descricao': 'Transferência para poupança'
             }
         ]
-        
+
         for tf in transferencias_exemplo:
-            # Ajustar saldos das contas
-            conta_origem = contas_criadas[tf['origem']]
-            conta_destino = contas_criadas[tf['destino']]
-            
-            valor = Decimal(str(tf['valor']))
-            
-            # Verificar se há saldo suficiente
-            if conta_origem.saldo >= valor:
-                conta_origem.saldo -= valor
-                conta_destino.saldo += valor
-                
-                transacao = Transacao(
-                    codigo_unico=str(uuid.uuid4()),
-                    conta_origem_id=conta_origem.id,
-                    conta_destino_id=conta_destino.id,
-                    tipo='transferencia',
-                    valor=valor,
-                    descricao=tf['descricao'],
-                    data_transacao=base_date - timedelta(days=tf['dias_atras']),
-                    status='concluida'
-                )
-                transacoes.append(transacao)
-        
+            # Só gera transferência se existirem contas nas posições indicadas
+            if tf['origem'] < len(contas_criadas) and tf['destino'] < len(contas_criadas):
+                conta_origem = contas_criadas[tf['origem']]
+                conta_destino = contas_criadas[tf['destino']]
+                valor = Decimal(str(tf['valor']))
+
+                if conta_origem.saldo >= valor:
+                    conta_origem.saldo -= valor
+                    conta_destino.saldo += valor
+
+                    transacao = Transacao(
+                        codigo_unico=str(uuid.uuid4()),
+                        conta_origem_id=conta_origem.id,
+                        conta_destino_id=conta_destino.id,
+                        tipo='transferencia',
+                        valor=valor,
+                        descricao=tf['descricao'],
+                        data_transacao=base_date - timedelta(days=tf['dias_atras']),
+                        status='concluida'
+                    )
+                    transacoes.append(transacao)
+
         # Adicionar algumas transações recentes (últimos 3 dias)
         transacoes_recentes = [
             {
@@ -179,54 +192,52 @@ def criar_dados_exemplo():
                 'descricao': 'Pagamento de freelance'
             }
         ]
-        
+
         for tf in transacoes_recentes:
-            conta_origem = contas_criadas[tf['origem']]
-            conta_destino = contas_criadas[tf['destino']]
-            
-            valor = Decimal(str(tf['valor']))
-            
-            if conta_origem.saldo >= valor:
-                conta_origem.saldo -= valor
-                conta_destino.saldo += valor
-                
-                transacao = Transacao(
-                    codigo_unico=str(uuid.uuid4()),
-                    conta_origem_id=conta_origem.id,
-                    conta_destino_id=conta_destino.id,
-                    tipo='transferencia',
-                    valor=valor,
-                    descricao=tf['descricao'],
-                    data_transacao=base_date - timedelta(hours=tf['horas_atras']),
-                    status='concluida'
-                )
-                transacoes.append(transacao)
-        
-        # Adicionar todas as transações ao banco
+            if tf['origem'] < len(contas_criadas) and tf['destino'] < len(contas_criadas):
+                conta_origem = contas_criadas[tf['origem']]
+                conta_destino = contas_criadas[tf['destino']]
+                valor = Decimal(str(tf['valor']))
+
+                if conta_origem.saldo >= valor:
+                    conta_origem.saldo -= valor
+                    conta_destino.saldo += valor
+
+                    transacao = Transacao(
+                        codigo_unico=str(uuid.uuid4()),
+                        conta_origem_id=conta_origem.id,
+                        conta_destino_id=conta_destino.id,
+                        tipo='transferencia',
+                        valor=valor,
+                        descricao=tf['descricao'],
+                        data_transacao=base_date - timedelta(hours=tf['horas_atras']),
+                        status='concluida'
+                    )
+                    transacoes.append(transacao)
+
         for transacao in transacoes:
             db.session.add(transacao)
-        
+
         db.session.commit()
         print(f"✅ {len(transacoes)} transações criadas com sucesso!")
-        
+
         # Mostrar resumo
-        print("\n" + "="*50)
-        print("RESUMO DOS DADOS CRIADOS")
-        print("="*50)
-        
+        print('\n' + '='*50)
+        print('RESUMO DOS DADOS CRIADOS')
+        print('='*50)
+
         for conta in contas_criadas:
             print(f"Conta {conta.numero_conta} - {conta.titular}")
             print(f"  CPF: {conta.cpf}")
             print(f"  Saldo: R$ {conta.saldo:,.2f}")
-            
-            # Contar transações
+
             total_transacoes = Transacao.query.filter(
-                (Transacao.conta_origem_id == conta.id) | 
+                (Transacao.conta_origem_id == conta.id) |
                 (Transacao.conta_destino_id == conta.id)
             ).count()
             print(f"  Transações: {total_transacoes}")
             print()
-        
+
         print(f"Total de contas: {len(contas_criadas)}")
         print(f"Total de transações: {len(transacoes)}")
         print("\n✅ Banco de dados populado com sucesso!")
