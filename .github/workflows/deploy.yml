@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE: techmarket-api
-  REGION: us-central1
-
 jobs:
   deploy:
     permissions:
@@ -22,18 +17,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # NOVO PASSO 1: AUTENTICAÇÃO
+      # Configura variáveis de ambiente para todos os próximos steps
+      - name: Set environment variables
+        run: |
+          echo "PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "SERVICE=techmarket-api" >> $GITHUB_ENV
+          echo "REGION=us-central1" >> $GITHUB_ENV
+
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # NOVO PASSO 2: SETUP DA CLI (sem autenticação, apenas configurando o ambiente)
       - name: Setup Google Cloud CLI
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-
 
       - name: Configure Docker to use gcloud as a credential helper
         run: |
