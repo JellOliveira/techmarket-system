@@ -10,17 +10,16 @@ jobs:
   deploy:
     permissions:
       contents: 'read'
-      id-token: 'write' # Necessário para autenticação OIDC ou, para fins de teste, garante que o ambiente pode ser escrito.
+      id-token: 'write'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Configura variáveis de ambiente para todos os próximos steps
+      # Só exporte variáveis simples!
       - name: Set environment variables
         run: |
-          echo "PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
           echo "SERVICE=techmarket-api" >> $GITHUB_ENV
           echo "REGION=us-central1" >> $GITHUB_ENV
 
@@ -38,12 +37,20 @@ jobs:
         run: |
           gcloud auth configure-docker
 
+      # Passe o PROJECT_ID como variável do shell (sem exportar via $GITHUB_ENV)
       - name: Build and Push Container
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          SERVICE: techmarket-api
         run: |
           docker build -t gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA .
           docker push gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA
 
       - name: Deploy to Cloud Run
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          SERVICE: techmarket-api
+          REGION: us-central1
         run: |
           gcloud run deploy $SERVICE \
             --image gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA \
